@@ -114,6 +114,7 @@
     <Compile Include="Data\Person.cs">
       <DependentUpon>DemoDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PersonListModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">

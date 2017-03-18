@@ -4,9 +4,97 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MVVMModalDialogDemo"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+        Title="MVVM Modal Dialog Demo"
+        Height="350"
+        Width="525">
+
+    <Window.Resources>
+      
+        <CollectionViewSource x:Key="PeopleCVS"
+                              Source="{Binding People}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="FirstName" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+
+        <!--No Items TextBlock Style-->
+        <Style  TargetType="TextBlock"
+                x:Key="No_Items_TextBlock_Style">
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="Visibility"
+                    Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding People.Count}"
+                             Value="0">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--Calls the InitCommand when Loaded-->
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <cmd:EventToCommand Command="{Binding Mode=OneWay, Path=InitCommand}"
+                                    PassEventArgsToCommand="True" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+
+        <!--Main Menu-->
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Header="New..."
+                          Command="{Binding AddPersonCommand}" />
+                <Separator />
+                <MenuItem Header="E_xit"
+                          Command="{Binding ExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Properties..."
+                          Command="{Binding EditPersonCommand}" />
+            </MenuItem>
+        </Menu>
+
+        <!--People List-->
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding Source={StaticResource PeopleCVS}}"
+                  SelectedItem="{Binding SelectedPersonListModel}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="First"
+                                    DisplayMemberBinding="{Binding FirstName}"
+                                    Width="150" />
+                    <GridViewColumn Header="Last"
+                                    DisplayMemberBinding="{Binding LastName}"
+                                    Width="150" />
+                    <GridViewColumn Header="Birth Date"
+                                    DisplayMemberBinding="{Binding BirthDate, StringFormat=\{0:d\}}"
+                                    Width="125" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!--No Items TextBlock-->
+        <TextBlock Grid.Row="1"
+                   Text="There are no items to view"
+                   Style="{StaticResource No_Items_TextBlock_Style}" />
     </Grid>
 </Window>
