@@ -94,6 +94,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataService\DataService.cs" />
+    <Compile Include="DataService\IDataService.cs" />
     <Compile Include="Data\DemoDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
