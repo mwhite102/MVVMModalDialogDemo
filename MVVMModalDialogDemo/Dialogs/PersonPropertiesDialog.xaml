@@ -1,0 +1,125 @@
+﻿<Window x:Class="MVVMModalDialogDemo.Dialogs.PersonPropertiesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MVVMModalDialogDemo.Dialogs"
+        mc:Ignorable="d"
+        Title="Person Properties"
+        SizeToContent="WidthAndHeight"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Closed="Window_Closed"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+
+        <Style x:Key="Heading_Style"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="Margin"
+                    Value="10" />
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="Width"
+                    Value="175" />
+            <Style.Triggers>
+                <!--Assigns Tooltip with Validation Error if an error exists-->
+                <Trigger Property="Validation.HasError"
+                         Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}">
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin"
+                    Value="3" />
+            <Setter Property="Width"
+                    Value="175" />
+            <Style.Triggers>
+                <!--Assigns Tooltip with Validation Error if an error exists-->
+                <Trigger Property="Validation.HasError"
+                         Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}">
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin"
+                    Value="5" />
+            <Setter Property="Width"
+                    Value="75" />
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--Heading-->
+        <TextBlock Text="Person Properties"
+                   Grid.ColumnSpan="2"
+                   Style="{StaticResource Heading_Style}" />
+
+        <!--FirstName-->
+        <Label Grid.Column="0"
+               Grid.Row="1"
+               Content="First Name" />
+        <TextBox Grid.Column="1"
+                 Grid.Row="1"
+                 Text="{Binding FirstName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!--LastName-->
+        <Label Grid.Row="2"
+               Content="Last Name" />
+        <TextBox Grid.Column="1"
+                 Grid.Row="2"
+                 Text="{Binding LastName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!--BirthDate-->
+        <Label Grid.Row="3"
+               Content="BirthDate" />
+        <DatePicker Grid.Column="1"
+                    Grid.Row="3"
+                    SelectedDate="{Binding BirthDate, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!--Save/Cancel Buttons-->
+        <StackPanel Grid.Column="1"
+                    Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="_Save"
+                    IsDefault="True" 
+                    Command="{Binding SaveCommand}"/>
+            <Button Content="_Cancel"
+                    IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

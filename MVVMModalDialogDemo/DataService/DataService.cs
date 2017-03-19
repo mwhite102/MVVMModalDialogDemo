@@ -53,6 +53,17 @@ namespace MVVMModalDialogDemo.DataService
             return await Task.Run(() => _Context.People.Where(o => o.Id == id).FirstOrDefault());
         }
 
+        public async Task<Person> NewPerson()
+        {
+            return await Task.Run(() =>
+            {
+                Person person = new Person();
+                _Context.People.Add(person);
+
+                return person;
+            });
+        }
+
         public bool HasChanges()
         {
             return _Context.ChangeTracker.HasChanges();

@@ -8,6 +8,7 @@ namespace MVVMModalDialogDemo.DataService
     {
         Task<List<Person>> GetPeople();
         Task<Person> GetPersonById(int id);
+        Task<Person> NewPerson();
         bool HasChanges();
         void RollBack();
         Task SaveChanges();

@@ -6,6 +6,8 @@ using System;
 using MVVMModalDialogDemo.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using MVVMModalDialogDemo.ModalDialogService;
+using MVVMModalDialogDemo.Data;
 
 namespace MVVMModalDialogDemo.ViewModel
 {
@@ -13,13 +15,15 @@ namespace MVVMModalDialogDemo.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private IDataService _DataService;
+        private IModalDialogService _DialogService;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel(IDataService dataService)
+        public MainViewModel(IDataService dataService, IModalDialogService dialogService)
         {
             _DataService = dataService;
+            _DialogService = dialogService;
         }
 
         public ObservableCollection<PersonListModel> People { get; } = new ObservableCollection<PersonListModel>();
@@ -45,24 +49,51 @@ namespace MVVMModalDialogDemo.ViewModel
         #region Private Methods
 
 
-        private void DoNewPerson()
+        private async void DoNewPerson()
         {
-            throw new NotImplementedException();
+            Person person = await _DataService.NewPerson();
+            ShowPersonProperties(person);
         }
 
-        private void DoPersonProperties()
+        private async void DoPersonProperties()
         {
-            throw new NotImplementedException();
+            if (_SelectedPersonListModel != null)
+            {
+                try
+                {
+                    Person person = await _DataService.GetPersonById(_SelectedPersonListModel.Id);
+                    ShowPersonProperties(person);
+                }
+                catch (Exception ex)
+                {
+                    _DialogService.ShowError(ex);
+                }
+            }
         }
 
-        private async Task Init()
+        private async void ShowPersonProperties(Person person)
         {
+            if (_DialogService.PersonProperties(person, _DataService))
+            {
+                // Refresh
+                await LoadPeople();
+            }
+        }
+
+        private async Task LoadPeople()
+        {
+            if (this.People.Count > 0)
+            {
+                this.People.Clear();
+            }
+
             var people = await _DataService.GetPeople();
             foreach(var person in people)
             {
                 this.People.Add(new PersonListModel(person));
             }
         }
+
 
         #endregion
 
@@ -130,7 +161,7 @@ namespace MVVMModalDialogDemo.ViewModel
             App.Current.Shutdown(0);
         }
 
-        private ICommand _InitCommand;
+        private ICommand _InitCommand;        
 
         public ICommand InitCommand
         {
@@ -147,7 +178,7 @@ namespace MVVMModalDialogDemo.ViewModel
 
         private async void InitCommandExecute()
         {
-            await Init();
+            await LoadPeople();
         }
 
         #endregion

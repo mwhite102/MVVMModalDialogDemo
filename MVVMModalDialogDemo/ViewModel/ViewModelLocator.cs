@@ -16,6 +16,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using MVVMModalDialogDemo.DataService;
+using MVVMModalDialogDemo.ModalDialogService;
 
 namespace MVVMModalDialogDemo.ViewModel
 {
@@ -33,6 +34,7 @@ namespace MVVMModalDialogDemo.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<IDataService, DataService.DataService>();
+            SimpleIoc.Default.Register<IModalDialogService, ModalDialogService.ModalDialogService>();
         }
 
         public MainViewModel Main

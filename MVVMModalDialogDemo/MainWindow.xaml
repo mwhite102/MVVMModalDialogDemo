@@ -42,6 +42,24 @@
             </Style.Triggers>
         </Style>
 
+        <ContextMenu x:Key="People_Listview_ContextMenu">
+            <MenuItem Header="_New ..."
+                      Command="{Binding AddPersonCommand}" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="People_ListViewItem_ContextMenu">
+            <MenuItem Header="_New..."
+                      Command="{Binding DataContext.AddPersonCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" />
+            <MenuItem Header="_Properties..."
+                      Command="{Binding DataContext.EditPersonCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}" />
+        </ContextMenu>
+
+        <Style x:Key="Person_ListView_ItemContainer_Style"
+               TargetType="ListViewItem">
+            <Setter Property="ContextMenu"
+                    Value="{StaticResource People_ListViewItem_ContextMenu}" />
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -61,7 +79,7 @@
         <!--Main Menu-->
         <Menu>
             <MenuItem Header="_File">
-                <MenuItem Header="New..."
+                <MenuItem Header="_New..."
                           Command="{Binding AddPersonCommand}" />
                 <Separator />
                 <MenuItem Header="E_xit"
@@ -76,7 +94,9 @@
         <!--People List-->
         <ListView Grid.Row="1"
                   ItemsSource="{Binding Source={StaticResource PeopleCVS}}"
-                  SelectedItem="{Binding SelectedPersonListModel}">
+                  SelectedItem="{Binding SelectedPersonListModel}"
+                  ContextMenu="{StaticResource People_Listview_ContextMenu}"
+                  ItemContainerStyle="{StaticResource Person_ListView_ItemContainer_Style}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="First"

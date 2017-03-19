@@ -114,9 +114,20 @@
     <Compile Include="Data\Person.cs">
       <DependentUpon>DemoDb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\PersonPropertiesDialog.xaml.cs">
+      <DependentUpon>PersonPropertiesDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ModalDialogService\IModalDialogService.cs" />
+    <Compile Include="ModalDialogService\ModalDialogService.cs" />
     <Compile Include="Models\PersonListModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\PersonViewModel.cs" />
+    <Compile Include="ViewModel\ValidatableViewModelBase.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Dialogs\PersonPropertiesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
